@@ -7,21 +7,27 @@ bundle = joblib.load("naija_sms_detector_bundle.joblib")
 model = bundle["model"]
 vectorizer = bundle["vectorizer"]
 
-st.set_page_config(page_title="Naija Scam SMS Detector", page_icon="📱")
+st.set_page_config(page_title="Naija SMS / WhatsApp Scam Detector", page_icon="📱")
 
-st.title("🇳🇬 Naija Scam SMS Detector")
-st.markdown("Detect whether an SMS message is **scam** or **legit** using a trained machine learning model.")
+st.title("🇳🇬 Naija SMS / WhatsApp Scam Detector")
+st.markdown("Detect whether a message is **scam** or **legit** using a trained machine learning model.")
+
+# --- Disclaimer ---
+st.warning(
+    "⚠️ This is an AI-powered tool and may occasionally make incorrect predictions. "
+    "Always use your own judgment before taking action based on any message."
+)
 
 # --- Language Selector ---
 language = st.selectbox("🌐 Select Language", ["English", "Yoruba", "Hausa", "Igbo"])
 if language != "English":
     st.info("🔄 Multilingual support coming soon. Currently, only English is supported.")
 
-# --- SMS Input ---
-sms_text = st.text_area("📩 Paste or type your SMS message here:", height=150)
+# --- Message Input ---
+sms_text = st.text_area("💬 Paste or type the SMS or WhatsApp message you want to check:", height=150)
 
-# --- Analyze SMS ---
-if st.button("🚀 Analyze SMS"):
+# --- Analyze SMS/WhatsApp ---
+if st.button("🚀 Analyze Message"):
     if not sms_text.strip():
         st.warning("Please enter a message first.")
     else:
@@ -62,11 +68,12 @@ if st.button("🚀 Analyze SMS"):
             st.markdown(f"### Prediction: <span style='color:{color}'>{label}</span>", unsafe_allow_html=True)
             st.markdown(f"**Confidence:** {confidence}%")
 
-# --- Feedback Section ---
-st.subheader("🗣️ Was this prediction correct?")
-feedback = st.radio("Let us know:", ["Yes", "No"], horizontal=True)
-if feedback == "No":
-    st.success("Thanks! Your feedback will help improve the system.")
+        # --- Feedback Section ---
+        st.subheader("🗣️ Was this prediction correct?")
+        feedback = st.radio("Let us know:", ["Yes", "No"], horizontal=True, index=None)
+
+        if feedback:
+            st.success("✅ Thanks! Your response has been recorded.")
 
 # Footer
 st.markdown("---")
